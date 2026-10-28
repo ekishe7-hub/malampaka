@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSpatial AI - Spatial Analysis Platform</title>
+
+    <!-- Leaflet & Leaflet Draw CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <header>
+                <h1>🌍 EcoSpatial AI</h1>
+                <p>Resilient Urban & Environmental Analytics</p>
+            </header>
+
+            <section class="control-group">
+                <h3>Analysis Configuration</h3>
+                <label for="prompt-select">Target Feature:</label>
+                <select id="prompt-select">
+                    <option value="drainage & flood risk">Drainage Channels & Flood Risk</option>
+                    <option value="vegetation canopy">Vegetation & Canopy Cover</option>
+                    <option value="built structures">Built Infrastructure & Settlements</option>
+                </select>
+
+                <button id="btn-analyze" disabled>Run AI Analysis</button>
+            </section>
+
+            <section id="results-panel" class="hidden">
+                <h3>Analysis Results</h3>
+                <div id="results-content">
+                    <p class="placeholder">Select an area on the map using the draw tool to begin.</p>
+                </div>
+            </section>
+
+            <footer>
+                <p>Track: <em>Build for Your World</em></p>
+                <p>Powered by SAM 3.1 & Muse Spark Open</p>
+            </footer>
+        </aside>
+
+        <!-- Map Container -->
+        <main id="map-container">
+            <div id="map"></div>
+        </main>
+    </div>
+
+    <!-- Leaflet & Leaflet Draw JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
