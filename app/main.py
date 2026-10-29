@@ -1,51 +1,22 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
-from typing import List, Optional
+from fastapi.responses import FileResponse
+from app.api.endpoints import router as api_router
 import os
 
-from app.services.baseten_service import BasetenSpatialService
+app = FastAPI(
+    title="EcoSpatial AI API",
+    description="Spatial Analysis and AI Segmentation API for Meta Hackathon",
+    version="1.0.0"
+)
 
-app = FastAPI(title="EcoSpatial AI", version="1.0.0")
+app.include_router(api_router, prefix="/api/v1")
 
-class SpatialRequest(BaseModel):
-    prompt: str
-    coordinates: List[List[float]]
+# Mount static frontend files
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
-class RerouteRequest(BaseModel):
-    origin: List[float]
-    destination: List[float]
-    flood_zone: Optional[List[List[float]]] = None
-
-@app.get("/")
-def root():
-    return {
-        "status": "EcoSpatial AI Backend Active",
-        "models": ["SAM 3.1", "Muse Spark Open", "Muse Wonder"],
-        "capabilities": ["Spatial Segmentation", "Flood Modeling", "Traffic Rerouting (Foleni)"]
-    }
-
-@app.post("/analyze-spatial")
-def analyze_spatial(payload: SpatialRequest):
-    try:
-        return BasetenSpatialService.analyze_spatial_area(
-            prompt=payload.prompt,
-            coordinates=payload.coordinates
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/reroute-traffic")
-def reroute_traffic(payload: RerouteRequest):
-    try:
-        return BasetenSpatialService.compute_traffic_reroute(
-            origin=payload.origin,
-            destination=payload.destination,
-            flood_zone=payload.flood_zone
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-if os.path.exists("app/static"):
-    app.mount("/static", StaticFiles(directory="app/static"), name="static")
+    @app.get("/")
+    async def serve_frontend():
+        return FileResponse(os.path.join(frontend_path, "index.html"))
