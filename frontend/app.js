@@ -37,7 +37,7 @@ map.on(L.Draw.Event.CREATED, function (e) {
     drawnItems.clearLayers();
     const layer = e.layer;
     drawnItems.addLayer(layer);
-    
+
     selectedBounds = layer.getBounds();
     btnAnalyze.disabled = false;
 });
